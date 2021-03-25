@@ -4,7 +4,8 @@
 extrn   LCD_Set_Position, LCD_Write_Character, LCD_Write_Low_Nibble, LCD_delay_ms
     
     
-global  Write_ALARM, Write_Snooze, Write_error, Write_zeros, Write_no_alarm, Write_New, Write_colon, Write_space, Write_Time, Write_Temp, Write_Alarm
+global  Write_ALARM, Write_Snooze, Write_error, Write_zeros, Write_no_alarm
+global	Write_New, Write_colon, Write_space, Write_Time, Write_Temp, Write_Alarm
 
     
 psect	Display_words_code, class=CODE
@@ -62,7 +63,6 @@ Write_ALARM:				    ;write the words 'time:' before displaying the time
 	return	   
 
 Write_error:
-	
 	movlw	'E'
 	call	LCD_Write_Character	;write 'E'
 	movlw	'r'
@@ -92,7 +92,6 @@ Write_error:
 	return
 	
 Write_Time:
-	
 	movlw	'T'
 	call	LCD_Write_Character	;write 'T'
 	movlw	'i'
