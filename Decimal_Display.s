@@ -19,10 +19,10 @@ in_24x8_24m:	ds 1	;24x8, 24 bit number middle byte input
 in_24x8_24h:	ds 1	;24x8, 24 bit number high byte input
 in_24x8_8:	ds 1	;24x8, 8 bit number input
     
-out_24x8_l:ds 1	;24x8, low byte output
+out_24x8_ll:ds 1	;24x8, low byte output
 out_24x8_ul:	ds 1	;24x8, second lowest byte output
 out_24x8_lu:	ds 1	;24x8, second highest byte output
-out_24x8_u:ds 1	;24x8, high byte output
+out_24x8_uu:ds 1	;24x8, high byte output
 intermediate_24x8:	ds 1	;24x8, intermediate used while multiplying
 
 psect	Hextodec_code,class=CODE
@@ -59,7 +59,7 @@ Write_Decimal_to_LCD:
 	andwf   out_24x8_lu, 0, 1	    ;preparing inputs for multiplication
 	movwf	in_24x8_24h, A		
 	movff	out_24x8_ul, in_24x8_24m
-	movff	out_24x8_l, in_24x8_24l
+	movff	out_24x8_ll, in_24x8_24l
 	
 	call	multiply24x8  ;third multiplication for conversion
 	
@@ -71,7 +71,7 @@ multiply24x8:
     
 	movf    in_24x8_24l, W, A
 	mulwf   in_24x8_8, A
-	movff   PRODL, out_24x8_l
+	movff   PRODL, out_24x8_ll
 	movff   PRODH, out_24x8_ul
 
 	movff   in_24x8_8, in_16x8_8
@@ -89,7 +89,7 @@ multiply24x8:
 	addwfc  out_24x8_lu, 1,0
 
 	movlw   0x00
-	addwfc  out_24x8_u,   1,0
+	addwfc  out_24x8_uu,   1,0
 	return
 
 multiply16x8:	
