@@ -1,10 +1,11 @@
 #include <xc.inc>
 
 extrn	Clock_Setup, Clock
-extrn	Operation, Operation_Setup
+extrn	Operation
 extrn	LCD_Setup, LCD_Clear
 extrn	Keypad, keypad_val, keypad_ascii
 extrn	Alarm_Setup
+extrn	ADC_Setup
   
 global	Operation_Check
     
@@ -24,7 +25,7 @@ start:
 	call	LCD_Setup
 	call	Clock_Setup
 	call	Alarm_Setup
-	call	Operation_Setup
+	call	ADC_Setup
 	
 	clrf	operation_check, A
 	
