@@ -8,7 +8,7 @@ extrn	operation_check
 extrn	Temp
 extrn	Keypad
     
-extrn	check_alarm
+extrn	Check_Alarm
 
     
 global	clock_sec, clock_min, clock_hrs
@@ -34,9 +34,6 @@ hex_D:	ds 1
 hex_E:	ds 1
 hex_F:	ds 1
 hex_null:   	ds  1
-
-timer_start_value_1: ds 1
-timer_start_value_2: ds 1
     
 skip_byte: ds 1
 
@@ -96,7 +93,7 @@ Clock:
 	bcf	TMR0IF		; clear interrupt flag
 	btfss	operation_check, 0, A ;skip rewrite clock if = 1
 	call	rewrite_clock	;write and display clock time as decimal on LCD 
-	call	check_alarm
+	call	Check_Alarm
 	retfie	f		; fast return from interrupt	
 
 rewrite_clock:
@@ -135,3 +132,6 @@ clock_inc:
 	return	
 	clrf	clock_hrs, A	    ;set hour time to 0 if = 24
 	return
+
+
+

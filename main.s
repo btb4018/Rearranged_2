@@ -7,7 +7,7 @@ extrn	Keypad, keypad_val
 extrn	Alarm_Setup
 extrn	ADC_Setup
   
-global	Operation_Check
+global	operation_check
     
 psect	udata_acs
 operation_check:	ds  1	;reserving byte   

@@ -92,12 +92,12 @@ LCD_cursor_on:
 	call    LCD_Send_Byte_I	;set cursor on
 	return
 	
-LCD_Set_to_Line1:
+LCD_Set_to_Line_1:
     movlw   10000000B
     call    LCD_Set_Position	;set cursor on
     return
     
-LCD_Set_to_Line2:
+LCD_Set_to_Line_2:
     movlw   11000000B
     call    LCD_Set_Position	;set cursor on
     return  
@@ -218,3 +218,6 @@ lcdlp1:	decf 	LCD_cnt_l, F, A	; no carry when 0x00 -> 0xff
 	return			; carry reset so return
 
 end
+
+
+

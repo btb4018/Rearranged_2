@@ -4,7 +4,7 @@
 extrn   LCD_Set_Position, LCD_Write_Character, LCD_Write_Low_Nibble, LCD_delay_ms
     
     
-global  Write_ALARM, Write_Snooze, Write_error, Write_zeros, Write_no_alarm
+global  Write_ALARM, Write_Snooze, Write_Error, Write_zeros, Write_no_alarm
 global	Write_New, Write_colon, Write_space, Write_Time, Write_Temp, Write_Alarm
 
     
@@ -62,22 +62,7 @@ Write_ALARM:				    ;write the words 'time:' before displaying the time
 	call delay	
 	return	   
 
-Write_error:
-	movlw	'E'
-	call	LCD_Write_Character	;write 'E'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'
-	movlw	'o'
-	call	LCD_Write_Character	;write 'o'
-	movlw	'r'
-	call	LCD_Write_Character	;write 'r'  
-	
-	return
-	
-Write_error:
-	
+Write_Error:
 	movlw	'E'
 	call	LCD_Write_Character	;write 'E'
 	movlw	'r'
@@ -208,3 +193,6 @@ delay:
 	return
 	
 end	
+
+
+

@@ -34,12 +34,12 @@ Temp:
 	;call	LCD_Set_Position	; sets position on LCD
 	call	ADC_Read	; reads voltage value and stores in ADRESH:ADRESL
 	
-	;movf	ADRESH, W
-	;call LCD_Write_Hex
-	;call delay
-	;movf	ADRESL, W
-	;call LCD_Write_Hex
-	call	Conversion	;converst from hex to decimal
+	movf	ADRESH, W
+	call LCD_Write_Hex
+	call delay
+	movf	ADRESL, W
+	call LCD_Write_Hex
+	;call	Conversion	;converst from hex to decimal
 	
 	movlw	10110010B
 	call	LCD_Write_Character
@@ -141,4 +141,6 @@ delayb:
 	decfsz	0x1B, A	; decrement until zero
 	bra	delayb
 	return
+
+
 

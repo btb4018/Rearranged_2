@@ -3,7 +3,11 @@
 extrn	LCD_Set_Position 
 extrn	Keypad, keypad_val
 extrn	hex_A, hex_B, hex_C, hex_D, hex_E, hex_F, hex_null
-extrn	Write_ALARM    
+extrn	Write_ALARM, Write_Snooze
+extrn	skip_byte
+extrn	clock_hrs, clock_min, clock_sec
+extrn	LCD_Set_to_Line_1, LCD_Set_to_Line_2, LCD_cursor_off, LCD_cursor_on
+extrn	LCD_delay_x4us
     
 global	alarm_on
 global	alarm_sec, alarm_min, alarm_hrs 
@@ -40,11 +44,11 @@ Alarm_Setup:
     
 Check_Alarm:
 	movlw	0x00
-	cpfseq	alarm_countdown		;check if alarm_buzz has reached 0
+	cpfseq	alarm_countdown, A		;check if alarm_buzz has reached 0
 	bra	decrement_alarm_countdown	;keep decrementing and buzzing if it hasn't
-	bra	compare_alarm		;go to compare alarm and return to normal cycles if it has reached 0
+	bra	Compare_Alarm		;go to compare alarm and return to normal cycles if it has reached 0
 
-decrement_alarm_buzz:
+decrement_alarm_countdown:
 	decf	alarm_countdown		;subroutine to keep decrementing alarm_buzz
 	call	ALARM			;and buzzing
 	return
@@ -76,7 +80,7 @@ ALARM:
 	call	LCD_Set_to_Line_1
 	call	Write_ALARM	    ;display alarm while alarm is ringing
 	
-	call	check_buzz_bit	    ;check the buzz_bit to set it if it was clear and to clear it if it was set
+	call	check_buzz_on_or_off	    ;check the buzz_bit to set it if it was clear and to clear it if it was set
 	;BTG	buzz_on_or_off, 0
 	
 	call	Buzzer		    ;call buzzer which buzzes when the buzz_bit is set
@@ -85,7 +89,7 @@ ALARM:
 		
 check_buzz_on_or_off:
 	btfsc	buzz_on_or_off, 0, A			;check if buzz bit is set
-	bra	clear_buzz_bit		;branch to set it if it isnt set
+	bra	clear_buzz_on_or_off		;branch to set it if it isnt set
 	bra	set_buzz_on_or_off		;branch to clear it if it is set
 clear_buzz_on_or_off:	
 	bcf	buzz_on_or_off, 0, A			;clear buzz_bit 
@@ -123,11 +127,11 @@ Check_Cancel_Snooze:
 	return		
 Buzz_Loop_2:
 	call	Buzz_Sequence		;buzz at every count
-	decfsz	Buzzer_Counter_2, A	
+	decfsz	buzzer_counter_2, A	
 	bra	Buzz_Loop_2
 	return
 
-Buzz_sequence:	
+Buzz_Sequence:	
 Check_if_Buzz:
 	btfss	buzz_on_or_off, 0, A	
 	bra	No_Buzz
@@ -170,4 +174,8 @@ Snooze_Alarm:
 	subwf	alarm_hrs, 1, 0
 	return
 
+	
 end
+
+
+
