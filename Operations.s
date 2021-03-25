@@ -300,6 +300,8 @@ Display_Set_Alarm:
 	
 	call	Write_Alarm	    ;write 'Alarm: ' to LCD
 	
+	call	Write_space
+	
 	;call	Display_zeros
 	btfss	alarm_on,0, A
 	call	Write_no_alarm
@@ -382,6 +384,8 @@ Display_Alarm_Time:
 	return	
 	
 output_error:
+	call	LCD_Clear
+	
 	call	Write_Error
 	
 	call	delay
