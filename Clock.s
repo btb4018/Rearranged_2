@@ -34,6 +34,8 @@ hex_E:	ds 1
 hex_F:	ds 1
 hex_null:   	ds  1
 
+timer_start_value_1: ds 1
+timer_start_value_2: ds 1
     
 skip_byte: ds 1
 
