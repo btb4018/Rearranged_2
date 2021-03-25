@@ -1,4 +1,4 @@
-    #include<xc.inc>
+#include<xc.inc>
 
 global	Keypad, keypad_val
 
@@ -181,4 +181,3 @@ delay_keypad:
 	call	LCD_delay_ms
 	return
 
-	end 

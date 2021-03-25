@@ -3,8 +3,8 @@
 extrn	Write_Time, Write_Temp
 extrn	LCD_Set_to_Line_1, LCD_Set_to_Line_2, LCD_Write_Character, LCD_Write_Hex
 extrn	Write_Decimal_to_LCD  
-extrn	keypad_val, keypad_ascii
-extrn operation_check
+extrn	keypad_val
+extrn	operation_check
 extrn	Temp
 extrn	Keypad
     
@@ -14,6 +14,7 @@ extrn	check_alarm
 global	clock_sec, clock_min, clock_hrs
 global	Clock, Clock_Setup, rewrite_clock
 global	hex_A, hex_B, hex_C, hex_D, hex_E, hex_F, hex_null  
+global	check_60, check_24, skip_byte    
     
 psect	udata_acs
 clock_hrs: ds 1

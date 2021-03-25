@@ -2,8 +2,8 @@
 
 extrn	Clock_Setup, Clock
 extrn	Operation
-extrn	LCD_Setup, LCD_Clear
-extrn	Keypad, keypad_val, keypad_ascii
+extrn	LCD_Setup
+extrn	Keypad, keypad_val
 extrn	Alarm_Setup
 extrn	ADC_Setup
   
@@ -31,12 +31,12 @@ start:
 	
 settings_clock:
 	call	Keypad
+	
 	movlw	0x0f
 	CPFSEQ	keypad_val, A
 	bra	settings_clock
 	
-	call	operation
-
+	call	Operation
 	
 	goto	settings_clock	; Sit in infinite loop
     
