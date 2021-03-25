@@ -3,13 +3,14 @@
 extrn	Write_Decimal_to_LCD
 extrn	LCD_Clear, LCD_Write_Character, LCD_Write_Hex, operation_check
 extrn	LCD_Send_Byte_I, LCD_Send_Byte_D
-extrn LCD_Set_to_Line_1, LCD_Set_to_Line_2, LCD
+extrn 	LCD_Set_to_Line_1, LCD_Set_to_Line_2, LCD_cursor_on, LCD_cursor_off
 extrn	LCD_Write_Low_Nibble, LCD_Write_High_Nibble
-extrn LCD_delay_x4us, LCD_delay_ms
-extrn	Keypad, keypad_val, keypad_ascii
+extrn 	LCD_delay_x4us, LCD_delay_ms
+extrn	Keypad, keypad_val
 extrn	rewrite_clock
 extrn	clock_sec, clock_min, clock_hrs  
 extrn	hex_A, hex_B, hex_C, hex_D, hex_E, hex_F, hex_null
+extrn 	check_60, check_24, skip_byte
 
 extrn	alarm_hrs, alarm_min, alarm_sec
 extrn	Display_Alarm_Time, alarm_on    
@@ -20,8 +21,6 @@ extrn  Write_New, Write_colon, Write_space, Write_Time, Write_Temp, Write_Alarm
 global	Operation
     
 psect	udata_acs
-check_60:	ds  1	;reserving byte to store decimal 60 in hex
-check_24:	ds  1	;reserving byte to store decimal 24 in hex
     
 set_time_hrs1: ds 1
 set_time_hrs2: ds 1  
@@ -33,8 +32,6 @@ set_time_sec2: ds 1
 temporary_hrs: ds 1
 temporary_min: ds 1
 temporary_sec: ds 1
-    
-skip_byte:	ds 1
     
 alarm:	ds 1
     
@@ -64,28 +61,15 @@ check_cancel:
 
 set_alarm:
 	;call LCD_Clear
-	movlw	00001111B
-	call    LCD_Send_Byte_I
 	
-	movlw	11000000B	    ;set cursor to first line
-	call	LCD_Set_Position
+	call	LCD_cursor_on
+	call	LCD_Set_to_Line_2
 	
 	call	Display_Set_Alarm
 	
-	movlw	11000000B	    ;set cursor to first line
-	call	LCD_Set_Position
+	call	LCD_Set_to_Line_2
 	
-	movlw	0x4E		    ;character 'N'
-	call	LCD_Write_Character
-	movlw	0x65		    ;character 'e'
-	call	LCD_Write_Character
-	movlw	0x77		    ;character 'w'
-	call	LCD_Write_Character
-
-	movlw	0x3A		    ;character ':'
-	call	LCD_Write_Character
-	movlw	0x20		    ;character ' '
-	call	LCD_Write_Character
+	call	Write_New
 	
 	;call	LCD_Write_Alarm	    ;write 'Time: ' to LCD
 	
@@ -93,19 +77,14 @@ set_alarm:
 	
 	bra set_time_clear	
 	
-set_time: 
 	
-    
-	movlw	00001111B
-	call    LCD_Send_Byte_I
-    
-	movlw	11000000B	    ;set cursor to first line
-	call	LCD_Set_Position
+set_time:
+    	call	LCD_cursor_on
+	call	LCD_Set_to_Line_2
 	
 	call	Display_Time_Setup
 	
-	movlw	10000000B	    ;set cursor to first line
-	call	LCD_Set_Position
+	call	LCD_Set_to_Line_1
 	
 	call	Write_Time	    ;write 'Time: ' to LCD
 	
@@ -395,8 +374,6 @@ write_no_alarm:
 	return	
 	
 Write_keypad_val:
-	;movf	keypad_ascii, W
-	;call	LCD_Write_Character
 	movf	keypad_val, A
 	call	LCD_Write_Low_Nibble
 	return
@@ -454,26 +431,12 @@ input_into_alarm:
 	
 	
 output_error:
-	movlw	00001100B
-	call    LCD_Send_Byte_I ;turn off cursor and blinking
-
-	call	LCD_Clear
-	movlw	10000000B
-	call	LCD_Set_Position	    ;set position in LCD to first line, first character
-	movlw	0x45
-	call	LCD_Write_Character	;write 'E'
-	movlw	0x72
-	call	LCD_Write_Character	;write 'r'
-	movlw	0x72
-	call	LCD_Write_Character	;write 'r'
-	movlw	0x6F
-	call	LCD_Write_Character	;write 'o'
-	movlw	0x72
-	call	LCD_Write_Character	;write 'r'  
-	movlw	0x64
+	call	Write_Error
+	
 	call	delay
 	call	delay
 	call	delay
+	
 	bra	    cancel
     
     
